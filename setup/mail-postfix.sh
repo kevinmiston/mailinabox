@@ -58,7 +58,7 @@ tools/editconf.py /etc/postfix/main.cf \
 	smtp_bind_address=$PRIVATE_IP \
 	smtp_bind_address6=$PRIVATE_IPV6 \
 	myhostname=$PRIMARY_HOSTNAME\
-	smtpd_banner="\$myhostname ESMTP Hi, I'm a Mail-in-a-Box (Ubuntu/Postfix; see https://mailinabox.email/)" \
+	smtpd_banner="\$myhostname ESMTP" \
 	mydestination=localhost
 
 # Tweak some queue settings:
@@ -93,7 +93,7 @@ tools/editconf.py /etc/postfix/master.cf -s -w \
 	  -o syslog_name=postfix/submission
 	  -o smtpd_milters=inet:127.0.0.1:8891
 	  -o smtpd_tls_security_level=encrypt
-	  -o smtpd_tls_ciphers=high -o smtpd_tls_exclude_ciphers=aNULL,DES,3DES,MD5,DES+MD5,RC4 -o smtpd_tls_mandatory_protocols=!SSLv2,!SSLv3
+	  -o smtpd_tls_ciphers=high -o smtpd_tls_exclude_ciphers=aNULL,RC4,EXP,MEDIUM,LOW,DES,3DES,SSLv2,CAMELLIA128-SHA,DHE-RSA-CAMELLIA128-SHA,DHE-RSA-CAMELLIA256-SHA,ECDHE-RSA-CHACHA20-POLY1305,CAMELLIA256-SHA256,DHE-RSA-AES256-CCM8,DHE-RSA-AES256-CCM,DHE-RSA-AES128-CCM8,DHE-RSA-AES128-CCM,AES256-CCM8,AES256-CCM,AES128-CCM8,AES128-CCM,CAMELLIA,kEDH+CAMELLIA,kRSA+CAMELLIA,DHE-RSA-CHACHA20-POLY1305 -o smtpd_tls_mandatory_protocols=!SSLv2,!SSLv3,!TLSv1,!TLSv1.1
 	  -o cleanup_service_name=authclean" \
 	"authclean=unix  n       -       -       -       0       cleanup
 	  -o header_checks=pcre:/etc/postfix/outgoing_mail_header_filters
@@ -102,7 +102,7 @@ tools/editconf.py /etc/postfix/master.cf -s -w \
 # Install the `outgoing_mail_header_filters` file required by the new 'authclean' service.
 cp conf/postfix_outgoing_mail_header_filters /etc/postfix/outgoing_mail_header_filters
 
-# Modify the `outgoing_mail_header_filters` file to use the local machine name and ip 
+# Modify the `outgoing_mail_header_filters` file to use the local machine name and ip
 # on the first received header line.  This may help reduce the spam score of email by
 # removing the 127.0.0.1 reference.
 sed -i "s/PRIMARY_HOSTNAME/$PRIMARY_HOSTNAME/" /etc/postfix/outgoing_mail_header_filters
@@ -119,9 +119,9 @@ tools/editconf.py /etc/postfix/main.cf \
 	smtpd_tls_cert_file=$STORAGE_ROOT/ssl/ssl_certificate.pem \
 	smtpd_tls_key_file=$STORAGE_ROOT/ssl/ssl_private_key.pem \
 	smtpd_tls_dh1024_param_file=$STORAGE_ROOT/ssl/dh2048.pem \
-	smtpd_tls_protocols=\!SSLv2,\!SSLv3 \
-	smtpd_tls_ciphers=medium \
-	smtpd_tls_exclude_ciphers=aNULL,RC4 \
+	smtpd_tls_protocols=\!SSLv2,\!SSLv3,\!TLSv1,\!TLSv1.1 \
+	smtpd_tls_ciphers=high \
+	smtpd_tls_exclude_ciphers=aNULL,RC4,EXP,MEDIUM,LOW,DES,3DES,SSLv2,CAMELLIA128-SHA,DHE-RSA-CAMELLIA128-SHA,DHE-RSA-CAMELLIA256-SHA,ECDHE-RSA-CHACHA20-POLY1305,CAMELLIA256-SHA256,DHE-RSA-AES256-CCM8,DHE-RSA-AES256-CCM,DHE-RSA-AES128-CCM8,DHE-RSA-AES128-CCM,AES256-CCM8,AES256-CCM,AES128-CCM8,AES128-CCM,CAMELLIA,kEDH+CAMELLIA,kRSA+CAMELLIA,DHE-RSA-CHACHA20-POLY1305 \
 	smtpd_tls_received_header=yes
 
 # Prevent non-authenticated users from sending mail that requires being
@@ -156,10 +156,10 @@ tools/editconf.py /etc/postfix/main.cf \
 # even if we don't know if it's to the right party, than to not encrypt at all. Instead we'll
 # now see notices about trusted certs. The CA file is provided by the package `ca-certificates`.
 tools/editconf.py /etc/postfix/main.cf \
-	smtp_tls_protocols=\!SSLv2,\!SSLv3 \
-	smtp_tls_mandatory_protocols=\!SSLv2,\!SSLv3 \
-	smtp_tls_ciphers=medium \
-	smtp_tls_exclude_ciphers=aNULL,RC4 \
+	smtp_tls_protocols=\!SSLv2,\!SSLv3,\!TLSv1,\TLSv1.1 \
+	smtp_tls_mandatory_protocols=\!SSLv2,\!SSLv3,\!TLSv1,\!TLSv1.1 \
+	smtp_tls_ciphers=high \
+	smtp_tls_exclude_ciphers=aNULL,RC4,EXP,MEDIUM,LOW,DES,3DES,SSLv2,CAMELLIA128-SHA,DHE-RSA-CAMELLIA128-SHA,DHE-RSA-CAMELLIA256-SHA,ECDHE-RSA-CHACHA20-POLY1305,CAMELLIA256-SHA256,DHE-RSA-AES256-CCM8,DHE-RSA-AES256-CCM,DHE-RSA-AES128-CCM8,DHE-RSA-AES128-CCM,AES256-CCM8,AES256-CCM,AES128-CCM8,AES128-CCM,CAMELLIA,kEDH+CAMELLIA,kRSA+CAMELLIA,DHE-RSA-CHACHA20-POLY1305 \
 	smtp_tls_security_level=dane \
 	smtp_dns_support_level=dnssec \
 	smtp_tls_CAfile=/etc/ssl/certs/ca-certificates.crt \
