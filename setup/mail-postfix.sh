@@ -93,7 +93,11 @@ tools/editconf.py /etc/postfix/master.cf -s -w \
 	  -o syslog_name=postfix/submission
 	  -o smtpd_milters=inet:127.0.0.1:8891
 	  -o smtpd_tls_security_level=encrypt
+<<<<<<< HEAD
 	  -o smtpd_tls_ciphers=high -o smtpd_tls_exclude_ciphers=aNULL,RC4,EXP,MEDIUM,LOW,DES,3DES,SSLv2,CAMELLIA128-SHA,DHE-RSA-CAMELLIA128-SHA,DHE-RSA-CAMELLIA256-SHA,ECDHE-RSA-CHACHA20-POLY1305,CAMELLIA256-SHA256,DHE-RSA-AES256-CCM8,DHE-RSA-AES256-CCM,DHE-RSA-AES128-CCM8,DHE-RSA-AES128-CCM,AES256-CCM8,AES256-CCM,AES128-CCM8,AES128-CCM,CAMELLIA,kEDH+CAMELLIA,kRSA+CAMELLIA,DHE-RSA-CHACHA20-POLY1305 -o smtpd_tls_mandatory_protocols=!SSLv2,!SSLv3,!TLSv1,!TLSv1.1
+=======
+	  -o smtpd_tls_ciphers=high -o smtpd_tls_exclude_ciphers=aNULL,DES,3DES,MD5,DES+MD5,RC4 -o smtpd_tls_mandatory_protocols=!SSLv2,!SSLv3,!TLSv1,!TLSv1.1
+>>>>>>> c90cb473516655c5a5761755dcbfecb06c5e3fc7
 	  -o cleanup_service_name=authclean" \
 	"authclean=unix  n       -       -       -       0       cleanup
 	  -o header_checks=pcre:/etc/postfix/outgoing_mail_header_filters
@@ -122,6 +126,7 @@ tools/editconf.py /etc/postfix/main.cf \
 	smtpd_tls_protocols=\!SSLv2,\!SSLv3,\!TLSv1,\!TLSv1.1 \
 	smtpd_tls_ciphers=high \
 	smtpd_tls_exclude_ciphers=aNULL,RC4,EXP,MEDIUM,LOW,DES,3DES,SSLv2,CAMELLIA128-SHA,DHE-RSA-CAMELLIA128-SHA,DHE-RSA-CAMELLIA256-SHA,ECDHE-RSA-CHACHA20-POLY1305,CAMELLIA256-SHA256,DHE-RSA-AES256-CCM8,DHE-RSA-AES256-CCM,DHE-RSA-AES128-CCM8,DHE-RSA-AES128-CCM,AES256-CCM8,AES256-CCM,AES128-CCM8,AES128-CCM,CAMELLIA,kEDH+CAMELLIA,kRSA+CAMELLIA,DHE-RSA-CHACHA20-POLY1305 \
+
 	smtpd_tls_received_header=yes
 
 # Prevent non-authenticated users from sending mail that requires being
