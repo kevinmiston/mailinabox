@@ -18,10 +18,13 @@ fi
 # Turn off nginx's default website.
 
 echo "Installing Nginx (web server)..."
-
-apt_install nginx php-cli php-fpm
+# explicitly installing mod-stream for dns-tls proxy
+apt_install nginx-full libnginx-mod-stream php-cli php-fpm
 
 rm -f /etc/nginx/sites-enabled/default
+
+#including nginx modules
+sed -i '1s/^/include \/etc\/nginx\/modules-enabled\/\*.conf\;\n/' /etc/nginx/nginx.conf
 
 # Copy in a nginx configuration file for common and best-practices
 # SSL settings from @konklone. Replace STORAGE_ROOT so it can find
